@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">徽兴聚盈</string>
+    <string name="action_longin">登陆</string>
+    <string name="phonenum">账号</string>
+    <string name="intpsw">请输入密码</string>
+    <string name="intpsw_old">请输入原密码</string>
+    <string name="intpsw_new">请输入新密码</string>
+    <string name="intpsw_newagain">请再次输入新密码</string>
+    <string name="loginnow">立即登陆</string>
+    <string name="action">操作</string>
+    <string name="change_psw">修改密码</string>
+    <string name="action_sure">确定</string>
+    <string name="main_lokkingtext">  公司口号：团结一心，齐力入金。加油，加油，加油。\n\n  公司精神：天行健，君子以自强不息；地势坤，君子以厚德载物。我不是天才，但我愿发愤图强，永不停息，就让所有的困苦艰难一起来吧，因为宝剑锋从磨砺出，梅花香自苦寒来！</string>
+
+</resources>

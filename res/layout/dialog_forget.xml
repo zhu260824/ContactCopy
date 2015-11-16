@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:padding="25dp" >
+
+    <TextView
+        android:id="@+id/tv_tip"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+         android:textColor="#4a4a4b"
+        android:gravity="center"
+        android:text="是否重置密码？"
+        android:textSize="19sp" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="30dp" >
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center" >
+
+            <TextView
+                android:id="@+id/tv_cancel"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:background="@drawable/black_roud_dialog_btn"
+                android:paddingBottom="5dp"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:paddingTop="5dp"
+                android:textColor="#4a4a4b"
+                android:text="取消"
+                android:textSize="17sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center" >
+
+            <TextView
+                android:id="@+id/tv_sure"
+                android:gravity="center"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/red_roud_dialog_btn"
+                android:paddingBottom="5dp"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:paddingTop="5dp"
+                android:text="重置密码"
+                android:textColor="#ffffff"
+                android:textSize="17sp" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</LinearLayout>

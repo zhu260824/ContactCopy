@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- basic color -->
+    <color name="text_dark_grey">#595757</color>
+    <color name="text_light_grey">#888889</color>
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="gray">#cccccc</color>
+    <color name="blue">#3847FF</color>
+    <color name="red">#FF0000</color>
+
+    <!-- 字体颜色 -->
+    <color name="all_text_color">#515050</color>
+    <!-- 输入框字体颜色 -->
+    <color name="edit_text_color">#989898</color>
+    <!-- 整体背景色 -->
+
+    <color name="activity_background">#ffffff</color>
+    <!-- 主界面背景色 -->
+
+    <color name="main_interface_background">#eeefef</color>
+    <!-- 底线 -->
+
+    <color name="base_line">#515050</color>
+    <!-- 深底线 -->
+
+    <color name="deep_base_line">#c9c9ca</color>
+    <color name="shallow_base_line">#b4b5b5</color>
+    <!-- 条款颜色 -->
+    <color name="clause_text_color">#EA5414</color>
+
+    <!-- 橘黄色 -->
+    <color name="croci_text_color">#45b4ed</color>
+    <!-- 取消按钮底色 -->
+    <color name="cancel_text_color">#595757</color>
+    <!-- 职位搜索标签色 -->
+    <color name="sea_blue_color">#45b4ed</color>
+
+    <color name="progresss">#FF6666</color>
+</resources>
