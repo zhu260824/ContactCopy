@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_interface_background"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="45dp"
+        android:background="#313433" >
+
+        <ImageView
+            android:id="@+id/iv_goback"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:padding="12dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/goback" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp"
+            android:text="@string/system_setting"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="8dp"
+        android:background="@color/white"
+        android:paddingLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:paddingTop="8dp" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:text="@string/open_one"
+            android:textSize="18sp" />
+
+        <view
+            android:id="@+id/switchView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            class="com.nineoldandroids.SwitchView" >
+
+            <TextView
+                android:layout_width="60dp"
+                android:layout_height="40dp"
+                android:background="@drawable/shape_corner_red"
+                android:gravity="center"
+                android:text="ON"
+                android:textColor="#ffffff"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="60dp"
+                android:layout_height="40dp"
+                android:background="@drawable/shape_corner_blue"
+                android:gravity="center"
+                android:text="OFF"
+                android:textColor="#ffffff"
+                android:textSize="16sp" />
+        </view>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="8dp"
+        android:paddingLeft="10dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/white"
+        android:paddingTop="8dp" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:text="@string/open_alarm"
+            android:textSize="18sp" />
+
+        <view
+            android:id="@+id/switchView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            class="com.nineoldandroids.SwitchView" >
+
+            <TextView
+                android:layout_width="60dp"
+                android:layout_height="40dp"
+                android:background="@drawable/shape_corner_red"
+                android:gravity="center"
+                android:text="ON"
+                android:textColor="#ffffff"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="60dp"
+                android:layout_height="40dp"
+                android:background="@drawable/shape_corner_blue"
+                android:gravity="center"
+                android:text="OFF"
+                android:textColor="#ffffff"
+                android:textSize="16sp" />
+        </view>
+    </LinearLayout>
+
+</LinearLayout>

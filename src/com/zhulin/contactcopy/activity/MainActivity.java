@@ -6,10 +6,8 @@ import java.util.Date;
 
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
-import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -78,7 +76,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.iv_down:
-			showLoadingDialog(MainActivity.this, "真在获取联系人......");
+			showLoadingDialog(MainActivity.this, "正在获取联系人......");
 			RequestManger.PhoneDown(MainActivity.this,user.loginToken, user.id, new Listener<RequestCall>() {
 
 				@Override
@@ -109,9 +107,12 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			}, errorListener);
 			break;
 		case R.id.lin_delete:
-//			showLoadingDialog(MainActivity.this, "正在读取联系人......");
-//			showMsg();
-			startActivity(new Intent(MainActivity.this, PhoneMangerActivity.class));
+			boolean one=getSharedPreferences("SYSTEMSET", MODE_PRIVATE).getBoolean("ONE", true);
+			if (one) {
+				showMsg();
+			}else {
+				startActivity(new Intent(MainActivity.this, PhoneMangerActivity.class));
+			}
 			break;
 		case R.id.lin_change_psw:
 			startActivityForResult(new Intent(MainActivity.this, RestPassWorldActivity.class),1);
@@ -180,14 +181,16 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 					downtime=System.currentTimeMillis();
 				tv_time.setText(new SimpleDateFormat("MM月dd日 HH:mm").format(new Date(downtime)));
 			}
-			if (downtime!=0  && downtime-System.currentTimeMillis()>=60*1000) {
-				Intent intent = new Intent(MainActivity.this, DownAlarmService.class);
-	            PendingIntent sender=PendingIntent.getBroadcast( MainActivity.this,0, intent, 0);
-	            AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
-	            am.set(AlarmManager.RTC_WAKEUP,downtime,sender);
+			boolean isalarm=getSharedPreferences("SYSTEMSET", MODE_PRIVATE).getBoolean("Alarm", true);
+			if (isalarm) {
+				if (downtime!=0  && downtime-System.currentTimeMillis()>=60*1000) {
+					Intent intent = new Intent(MainActivity.this, DownAlarmService.class);
+		            PendingIntent sender=PendingIntent.getBroadcast( MainActivity.this,0, intent, 0);
+		            AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
+		            am.set(AlarmManager.RTC_WAKEUP,downtime,sender);
+				}	
 			}
 		}
-		
 	}
 	
 	
@@ -195,6 +198,11 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	
 	private class DetalsContacts  extends AsyncTask<Integer, Integer,Integer> {
 		private int sunnum=0;
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			showLoadingDialog(MainActivity.this, "正在读取联系人......");
+		}
 		@Override
 		protected Integer doInBackground(Integer... params) {
 			ArrayList<HXPhone> phonelists=(ArrayList<HXPhone>) ContactsUtil.ReadAll(MainActivity.this);

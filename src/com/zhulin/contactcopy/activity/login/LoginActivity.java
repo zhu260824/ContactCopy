@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response.Listener;
@@ -18,6 +19,7 @@ import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;
 import com.zhulin.contactcopy.R;
 import com.zhulin.contactcopy.activity.MainActivity;
+import com.zhulin.contactcopy.activity.SettingActivity;
 import com.zhulin.contactcopy.app.BaseActivity;
 import com.zhulin.contactcopy.manger.RequestManger;
 import com.zhulin.contactcopy.utils.CheckUtils;
@@ -30,6 +32,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 	private LinearLayout lin_rember;
 	private ImageView iv_check;
 	private EditText et_phone, et_psw;
+	private TextView tv_setting;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,15 +46,15 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 		iv_check = (ImageView) findViewById(R.id.iv_check);
 		et_phone = (EditText) findViewById(R.id.et_phone);
 		et_psw = (EditText) findViewById(R.id.et_psw);
+		tv_setting=(TextView) findViewById(R.id.tv_setting);
+		tv_setting.setOnClickListener(this);
 		btn_login.setOnClickListener(this);
 		lin_rember.setOnClickListener(this);
 		iv_check.setTag(true);
-		String name = getSharedPreferences("NameAndPsw", MODE_PRIVATE)
-				.getString("username", "");
+		String name = getSharedPreferences("NameAndPsw", MODE_PRIVATE).getString("username", "");
 		if (name != null && name.length() >= 1) {
 			et_phone.setText(name);
-			et_psw.setText(getSharedPreferences("NameAndPsw", MODE_PRIVATE)
-					.getString("psw", ""));
+			et_psw.setText(getSharedPreferences("NameAndPsw", MODE_PRIVATE).getString("psw", ""));
 		}
 	}
 
@@ -62,54 +65,31 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 			String checks = CheckUtils.checkLogin(et_phone, et_psw);
 			if (checks.equals("true")) {
 				showLoadingDialog(LoginActivity.this, "正在登陆中......");
-				RequestManger.Login(LoginActivity.this, et_phone.getText()
-						.toString(), et_psw.getText().toString(),
-						new Listener<RequestCall>() {
+				RequestManger.Login(LoginActivity.this, et_phone.getText().toString(), et_psw.getText().toString(),new Listener<RequestCall>() {
 
 							@Override
 							public void onResponse(RequestCall response) {
 								dismissloading();
 								if (response.getParser().getResponseMsg() != null)
-									Toast.makeText(
-											LoginActivity.this,
-											response.getParser()
-													.getResponseMsg(),
-											Toast.LENGTH_SHORT).show();
+									Toast.makeText(LoginActivity.this,response.getParser().getResponseMsg(),Toast.LENGTH_SHORT).show();
 								if (response.getParser().getResultSuccess()) {
 									if (iv_check != null
 											&& iv_check.getTag() != null) {
 										boolean checked = (Boolean) iv_check
 												.getTag();
 										if (checked) {
-											getSharedPreferences("NameAndPsw",
-													MODE_PRIVATE)
-													.edit()
-													.putString(
-															"username",
-															et_phone.getText()
-																	.toString())
-													.putString(
-															"psw",
-															et_psw.getText()
-																	.toString())
-													.commit();
+											getSharedPreferences("NameAndPsw",MODE_PRIVATE).edit().putString("username",et_phone.getText().toString()).putString("psw",et_psw.getText().toString()).commit();
 										} else {
-											getSharedPreferences("NameAndPsw",
-													MODE_PRIVATE).edit()
-													.putString("psw", "")
-													.commit();
+											getSharedPreferences("NameAndPsw",MODE_PRIVATE).edit().putString("psw", "").commit();
 										}
 									}
-									startActivity(new Intent(
-											LoginActivity.this,
-											MainActivity.class));
+									startActivity(new Intent(LoginActivity.this,MainActivity.class));
 									LoginActivity.this.finish();
 								}
 							}
 						}, errorListener);
 			} else {
-				Toast.makeText(LoginActivity.this, checks, Toast.LENGTH_SHORT)
-						.show();
+				Toast.makeText(LoginActivity.this, checks, Toast.LENGTH_SHORT).show();
 			}
 			break;
 		case R.id.lin_rember:
@@ -124,7 +104,9 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 				}
 			}
 			break;
-
+		case R.id.tv_setting:
+			startActivity(new Intent(LoginActivity.this,SettingActivity.class));
+			break;
 		default:
 			break;
 		}

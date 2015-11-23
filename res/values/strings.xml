@@ -3,6 +3,10 @@
 
     <string name="app_name">徽兴聚盈</string>
     <string name="action_longin">登陆</string>
+    <string name="action_setting">设置</string>
+    <string name="system_setting">系统设置</string>
+    <string name="open_one">开启联系人一键清空</string>
+    <string name="open_alarm">开启闹钟</string>
     <string name="phonenum">账号</string>
     <string name="intpsw">请输入密码</string>
     <string name="intpsw_old">请输入原密码</string>

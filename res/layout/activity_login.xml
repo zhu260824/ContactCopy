@@ -5,16 +5,30 @@
     android:background="#f4f4f4"
     android:orientation="vertical" >
 
-    <TextView
+    <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="45dp"
-        android:background="#313433"
-        android:gravity="center"
-        android:paddingBottom="8dp"
-        android:paddingTop="8dp"
-        android:text="@string/action_longin"
-        android:textColor="@color/white"
-        android:textSize="16sp" />
+        android:background="#313433" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/action_longin"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_setting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:text="@string/action_setting"
+            android:padding="10dp"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+    </RelativeLayout>
 
     <ImageView
         android:layout_width="fill_parent"
@@ -57,8 +71,8 @@
                     android:gravity="center_vertical"
                     android:hint="@string/phonenum"
                     android:inputType="text"
-                     android:singleLine="true"
                     android:paddingLeft="20dp"
+                    android:singleLine="true"
                     android:textColor="@color/text_dark_grey"
                     android:textColorHint="@color/text_light_grey"
                     android:textSize="20sp" />
@@ -97,8 +111,8 @@
                     android:gravity="center_vertical"
                     android:hint="@string/intpsw"
                     android:paddingLeft="20dp"
-                    android:singleLine="true"
                     android:password="true"
+                    android:singleLine="true"
                     android:textColor="@color/text_dark_grey"
                     android:textColorHint="@color/text_light_grey"
                     android:textSize="20sp" />
@@ -138,17 +152,17 @@
             android:id="@+id/iv_check"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:scaleType="centerInside"
-            android:background="@drawable/checkbox_on" />
+            android:background="@drawable/checkbox_on"
+            android:scaleType="centerInside" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="记住密码"
-            android:layout_marginLeft="8dp"
-            android:textSize="16sp"
             android:layout_gravity="center_vertical"
-            android:textColor="@color/text_dark_grey" />
+            android:layout_marginLeft="8dp"
+            android:text="记住密码"
+            android:textColor="@color/text_dark_grey"
+            android:textSize="16sp" />
     </LinearLayout>
 
 </LinearLayout>
