@@ -6,7 +6,7 @@
 
     <uses-sdk
         android:minSdkVersion="8"
-        android:targetSdkVersion="21" />
+        android:targetSdkVersion="22" />
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -47,7 +47,13 @@
             android:name="com.zhulin.contactcopy.activity.PhoneMangerActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.zhulin.contactcopy.activity.AlarmActivity"
+            android:name="com.zhulin.contactcopy.activity.receiver.AlarmActivity"
+            android:screenOrientation="portrait" />
+             <activity
+            android:name="com.zhulin.contactcopy.activity.receiver.CleanContactActivity"
+            android:screenOrientation="portrait" />
+                  <activity
+            android:name="com.zhulin.contactcopy.activity.receiver.RefershDataActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name="com.zhulin.contactcopy.activity.SettingActivity"
@@ -62,7 +68,13 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
         <receiver
-            android:name="com.zhulin.contactcopy.activity.DownAlarmService"
+            android:name="com.zhulin.contactcopy.receiver.DownAlarmReceiver"
+            android:process=":remote" />
+         <receiver
+            android:name="com.zhulin.contactcopy.receiver.CleanContactReceiver"
+            android:process=":remote" />
+          <receiver
+            android:name="com.zhulin.contactcopy.receiver.RefershDataReceiver"
             android:process=":remote" />
 
         <meta-data

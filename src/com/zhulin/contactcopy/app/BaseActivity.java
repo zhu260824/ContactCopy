@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.VolleyError;
-import com.umeng.analytics.MobclickAgent;
+import com.library.UMengCountUtils;
 import com.zhulin.contactcopy.R;
 import com.zhulin.contactcopy.view.MyDialog;
 
@@ -28,16 +28,13 @@ public class BaseActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		MobclickAgent.onResume(this);
-		MobclickAgent.onPageStart(this.getClass().getName()); 
-	
+		UMengCountUtils.startPage(this);
 	}
 	
 	@Override
 	protected void onPause() {
 		super.onPause();
-		MobclickAgent.onPause(this);
-		MobclickAgent.onPageEnd(this.getClass().getName()); 
+		UMengCountUtils.endPage(this);
 		
 	}
 	

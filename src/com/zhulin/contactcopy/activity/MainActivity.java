@@ -36,6 +36,9 @@ import com.zhulin.contactcopy.paser.HXPhone;
 import com.zhulin.contactcopy.paser.HXPhonePaser;
 import com.zhulin.contactcopy.paser.User;
 import com.zhulin.contactcopy.paser.UserPaser;
+import com.zhulin.contactcopy.receiver.CleanContactReceiver;
+import com.zhulin.contactcopy.receiver.DownAlarmReceiver;
+import com.zhulin.contactcopy.receiver.RefershDataReceiver;
 import com.zhulin.contactcopy.utils.ContactsUtil;
 import com.zhulin.contactcopy.view.MyDialog;
 import com.zhulin.contactcopy.view.RadialProgress;
@@ -44,7 +47,8 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	private RadialProgress progress;
 	private TextView tv_sum_number,tv_down_number,tv_progress,tv_time;
 	private ImageView iv_down,iv_login_out;
-	private LinearLayout lin_delete,lin_change_psw,lin_user_manger,lin_upmanger,lin_manger;
+	private LinearLayout lin_delete,lin_change_psw;
+//	lin_user_manger,lin_upmanger,lin_manger;
 	private MyDialog progDialog;
 	private ProgressBar pb;
 	private User user;
@@ -60,16 +64,17 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		iv_login_out=(ImageView) findViewById(R.id.iv_login_out);
 		lin_delete=(LinearLayout) findViewById(R.id.lin_delete);
 		lin_change_psw=(LinearLayout) findViewById(R.id.lin_change_psw);
-		lin_user_manger=(LinearLayout) findViewById(R.id.lin_user_manger);
-		lin_upmanger=(LinearLayout) findViewById(R.id.lin_upmanger);
-		lin_manger=(LinearLayout) findViewById(R.id.lin_manger);
+//		lin_user_manger=(LinearLayout) findViewById(R.id.lin_user_manger);
+//		lin_upmanger=(LinearLayout) findViewById(R.id.lin_upmanger);
+//		lin_manger=(LinearLayout) findViewById(R.id.lin_manger);
 		iv_down.setOnClickListener(this);
 		iv_login_out.setOnClickListener(this);
 		lin_delete.setOnClickListener(this);
 		lin_change_psw.setOnClickListener(this);
-		lin_user_manger.setOnClickListener(this);
-		lin_upmanger.setOnClickListener(this);
+//		lin_user_manger.setOnClickListener(this);
+//		lin_upmanger.setOnClickListener(this);
 		new initData(0).execute();
+		openReferDataAlarm();
 	}
 
 	@Override
@@ -156,20 +161,20 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			}else {
 				progress.setCurrentValue(down*100/sum);
 			}
-			int system=Integer.valueOf(user.userRight==null?"2":user.userRight);
-			if (system==0) {
-				lin_manger.setVisibility(View.VISIBLE);
-				lin_user_manger.setVisibility(View.VISIBLE);
-				lin_upmanger.setVisibility(View.VISIBLE);
-			}else if (system==1) {
-				lin_manger.setVisibility(View.VISIBLE);
-				lin_user_manger.setVisibility(View.VISIBLE);
-				lin_upmanger.setVisibility(View.GONE);
-			}else {
-				lin_manger.setVisibility(View.GONE);
-				lin_user_manger.setVisibility(View.GONE);
-				lin_upmanger.setVisibility(View.GONE);
-			}
+//			int system=Integer.valueOf(user.userRight==null?"2":user.userRight);
+//			if (system==0) {
+//				lin_manger.setVisibility(View.VISIBLE);
+//				lin_user_manger.setVisibility(View.VISIBLE);
+//				lin_upmanger.setVisibility(View.VISIBLE);
+//			}else if (system==1) {
+//				lin_manger.setVisibility(View.VISIBLE);
+//				lin_user_manger.setVisibility(View.VISIBLE);
+//				lin_upmanger.setVisibility(View.GONE);
+//			}else {
+//				lin_manger.setVisibility(View.GONE);
+//				lin_user_manger.setVisibility(View.GONE);
+//				lin_upmanger.setVisibility(View.GONE);
+//			}
 			long downtime=0;
 			if (lasttime!=0) {
 				 downtime=lasttime+Long.valueOf(user.perDownTime==null?"0":user.perDownTime);
@@ -181,10 +186,17 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 					downtime=System.currentTimeMillis();
 				tv_time.setText(new SimpleDateFormat("MM月dd日 HH:mm").format(new Date(downtime)));
 			}
+			if (downtime!=0  && downtime-System.currentTimeMillis()>=180*1000) {
+				Intent intent = new Intent(MainActivity.this, CleanContactReceiver.class);
+	            PendingIntent sender=PendingIntent.getBroadcast( MainActivity.this,0, intent, 0);
+	            AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
+	            long tiptime=downtime-120*1000;
+	            am.set(AlarmManager.RTC_WAKEUP,tiptime,sender);
+			}	
 			boolean isalarm=getSharedPreferences("SYSTEMSET", MODE_PRIVATE).getBoolean("Alarm", true);
 			if (isalarm) {
 				if (downtime!=0  && downtime-System.currentTimeMillis()>=60*1000) {
-					Intent intent = new Intent(MainActivity.this, DownAlarmService.class);
+					Intent intent = new Intent(MainActivity.this, DownAlarmReceiver.class);
 		            PendingIntent sender=PendingIntent.getBroadcast( MainActivity.this,0, intent, 0);
 		            AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
 		            am.set(AlarmManager.RTC_WAKEUP,downtime,sender);
@@ -378,4 +390,27 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			}
 		});
 	}
+	
+	@SuppressLint("SimpleDateFormat")
+	private void openReferDataAlarm() {
+		String dd=new SimpleDateFormat("HH:mm:ss").format(System.currentTimeMillis());
+		String[] data=dd.split(":");
+		int sh=Integer.valueOf(data[0]);
+		int h=0;
+		if (sh>2) {
+			h=24-sh+2;
+		}else {
+			h=2-sh;
+		}
+		int m=59-Integer.valueOf(data[1]);
+		int s=59-Integer.valueOf(data[2]);
+		long triggerAtMillis=h*60*60*1000+m*60*1000+s*1000;
+		Intent intent = new Intent(MainActivity.this, RefershDataReceiver.class);
+        PendingIntent sender=PendingIntent.getBroadcast( MainActivity.this,0, intent, 0);
+        AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
+        am.setRepeating(AlarmManager.RTC_WAKEUP, triggerAtMillis, 24*60*60*1000, sender);
+	}
+
+	
+	
 }

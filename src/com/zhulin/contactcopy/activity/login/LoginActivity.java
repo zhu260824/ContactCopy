@@ -13,9 +13,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response.Listener;
+import com.library.UMengCountUtils;
 import com.library.app.ZLApplication;
 import com.library.http.RequestCall;
-import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;
 import com.zhulin.contactcopy.R;
 import com.zhulin.contactcopy.activity.MainActivity;
@@ -38,7 +38,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
-		MobclickAgent.updateOnlineConfig(LoginActivity.this);
+		UMengCountUtils.upDataOnLine(this);
 		UmengUpdateAgent.setUpdateOnlyWifi(false);
 		UmengUpdateAgent.update(this);
 		btn_login = (Button) findViewById(R.id.btn_login);
