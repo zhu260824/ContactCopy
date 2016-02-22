@@ -2,7 +2,9 @@ package com.zhulin.contactcopy.activity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
@@ -12,6 +14,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -188,7 +191,8 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			}
 			if (downtime!=0  && downtime-System.currentTimeMillis()>=180*1000) {
 				Intent intent = new Intent(MainActivity.this, CleanContactReceiver.class);
-	            PendingIntent sender=PendingIntent.getBroadcast( MainActivity.this,0, intent, 0);
+				intent.setAction("receiver.CleanContactActivity");
+				PendingIntent sender=PendingIntent.getBroadcast( MainActivity.this,0, intent, 0);
 	            AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
 	            long tiptime=downtime-120*1000;
 	            am.set(AlarmManager.RTC_WAKEUP,tiptime,sender);
@@ -197,7 +201,8 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			if (isalarm) {
 				if (downtime!=0  && downtime-System.currentTimeMillis()>=60*1000) {
 					Intent intent = new Intent(MainActivity.this, DownAlarmReceiver.class);
-		            PendingIntent sender=PendingIntent.getBroadcast( MainActivity.this,0, intent, 0);
+					intent.setAction("receiver.AlarmActivity");
+					PendingIntent sender=PendingIntent.getBroadcast( MainActivity.this,0, intent, 0);
 		            AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
 		            am.set(AlarmManager.RTC_WAKEUP,downtime,sender);
 				}	
@@ -393,24 +398,47 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	
 	@SuppressLint("SimpleDateFormat")
 	private void openReferDataAlarm() {
-		String dd=new SimpleDateFormat("HH:mm:ss").format(System.currentTimeMillis());
-		String[] data=dd.split(":");
-		int sh=Integer.valueOf(data[0]);
-		int h=0;
-		if (sh>2) {
-			h=24-sh+2;
-		}else {
-			h=2-sh;
-		}
-		int m=59-Integer.valueOf(data[1]);
-		int s=59-Integer.valueOf(data[2]);
-		long triggerAtMillis=h*60*60*1000+m*60*1000+s*1000;
+//		String dd=new SimpleDateFormat("HH:mm:ss").format(System.currentTimeMillis());
+//		String[] data=dd.split(":");
+//		int sh=Integer.valueOf(data[0]);
+//		int h=0;
+//		if (sh>2) {
+//			h=24-sh+2;
+//		}else {
+//			h=2-sh;
+//		}
+//		int m=59-Integer.valueOf(data[1]);
+//		int s=59-Integer.valueOf(data[2]);
+//		long triggerAtMillis=h*60*60*1000+m*60*1000+s*1000;
 		Intent intent = new Intent(MainActivity.this, RefershDataReceiver.class);
+		intent.setAction("receiver.RefershDataActivity");
         PendingIntent sender=PendingIntent.getBroadcast( MainActivity.this,0, intent, 0);
+        long firstTime = SystemClock.elapsedRealtime(); // 开机之后到现在的运行时间(包括睡眠时间)  
+        long systemTime = System.currentTimeMillis();  
+        Calendar calendar = Calendar.getInstance();  
+        calendar.setTimeInMillis(System.currentTimeMillis());  
+        // 这里时区需要设置一下，不然会有8个小时的时间差  
+        calendar.setTimeZone(TimeZone.getTimeZone("GMT+8"));  
+        calendar.set(Calendar.MINUTE, 0);  
+        calendar.set(Calendar.HOUR_OF_DAY, 3);  
+        calendar.set(Calendar.SECOND, 0);  
+        calendar.set(Calendar.MILLISECOND, 0);  
+        // 选择的定时时间  
+        long selectTime = calendar.getTimeInMillis();  
+        // 如果当前时间大于设置的时间，那么就从第二天的设定时间开始  
+        if(systemTime > selectTime) {  
+	        calendar.add(Calendar.DAY_OF_MONTH, 1);  
+	        selectTime = calendar.getTimeInMillis();  
+        }  
+        // 计算现在时间到设定时间的时间差  
+        long time = selectTime - systemTime;  
+        firstTime += time;  
+        // 进行闹铃注册  
+        long TIME_INTERVAL=1000L * 60 * 60 * 24;
         AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
-        am.setRepeating(AlarmManager.RTC_WAKEUP, triggerAtMillis, 24*60*60*1000, sender);
-	}
-
+        am.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, firstTime,TIME_INTERVAL, sender);
 	
+	
+	}
 	
 }

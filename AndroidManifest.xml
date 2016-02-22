@@ -48,13 +48,25 @@
             android:screenOrientation="portrait" />
         <activity
             android:name="com.zhulin.contactcopy.activity.receiver.AlarmActivity"
-            android:screenOrientation="portrait" />
-             <activity
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="receiver.AlarmActivity" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name="com.zhulin.contactcopy.activity.receiver.CleanContactActivity"
-            android:screenOrientation="portrait" />
-                  <activity
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="receiver.CleanContactActivity" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name="com.zhulin.contactcopy.activity.receiver.RefershDataActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="receiver.RefershDataActivity" />
+            </intent-filter>
+        </activity>
         <activity
             android:name="com.zhulin.contactcopy.activity.SettingActivity"
             android:screenOrientation="portrait" />
@@ -70,10 +82,10 @@
         <receiver
             android:name="com.zhulin.contactcopy.receiver.DownAlarmReceiver"
             android:process=":remote" />
-         <receiver
+        <receiver
             android:name="com.zhulin.contactcopy.receiver.CleanContactReceiver"
             android:process=":remote" />
-          <receiver
+        <receiver
             android:name="com.zhulin.contactcopy.receiver.RefershDataReceiver"
             android:process=":remote" />
 
