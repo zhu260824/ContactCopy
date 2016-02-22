@@ -195,7 +195,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 				PendingIntent sender=PendingIntent.getBroadcast( MainActivity.this,0, intent, 0);
 	            AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
 	            long tiptime=downtime-120*1000;
-	            am.set(AlarmManager.RTC_WAKEUP,tiptime,sender);
+	            am.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,tiptime,sender);
 			}	
 			boolean isalarm=getSharedPreferences("SYSTEMSET", MODE_PRIVATE).getBoolean("Alarm", true);
 			if (isalarm) {
@@ -204,7 +204,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 					intent.setAction("receiver.AlarmActivity");
 					PendingIntent sender=PendingIntent.getBroadcast( MainActivity.this,0, intent, 0);
 		            AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
-		            am.set(AlarmManager.RTC_WAKEUP,downtime,sender);
+		            am.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,downtime,sender);
 				}	
 			}
 		}
