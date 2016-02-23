@@ -84,22 +84,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.iv_down:
-			showLoadingDialog(MainActivity.this, "正在获取联系人......");
-			RequestManger.PhoneDown(MainActivity.this,user.loginToken, user.id, new Listener<RequestCall>() {
-
-				@Override
-				public void onResponse(RequestCall response) {
-					dismissloading();
-					if (response.getParser().getResultSuccess()) {
-						new downContacts().execute();
-					}else if (response.getParser().getTokenerro()) {
-						LoginOut();
-					}else {
-						if (response.getParser().getResponseMsg()!=null) 
-							Toast.makeText(MainActivity.this, response.getParser().getResponseMsg(), Toast.LENGTH_SHORT).show();
-					}
-				}
-			}, errorListener);
+			checkTime();
 			break;
 		case R.id.iv_login_out:
 			showLoadingDialog(MainActivity.this, "注销中......");
@@ -437,8 +422,35 @@ public class MainActivity extends BaseActivity implements OnClickListener {
         long TIME_INTERVAL=1000L * 60 * 60 * 24;
         AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
         am.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, firstTime,TIME_INTERVAL, sender);
-	
-	
 	}
+	
+	private void  checkTime(){
+		 Calendar calendar = Calendar.getInstance();  
+	     calendar.setTimeInMillis(System.currentTimeMillis());  
+	     // 这里时区需要设置一下，不然会有8个小时的时间差  
+	     calendar.setTimeZone(TimeZone.getTimeZone("GMT+8"));  
+	     int hour=calendar.get(Calendar.HOUR_OF_DAY);
+	     if (hour<5) {
+			Toast.makeText(MainActivity.this, "每天00:00-05:00暂停下载，请稍后下载", Toast.LENGTH_SHORT).show();
+		}else {
+			showLoadingDialog(MainActivity.this, "正在获取联系人......");
+			RequestManger.PhoneDown(MainActivity.this,user.loginToken, user.id, new Listener<RequestCall>() {
+
+				@Override
+				public void onResponse(RequestCall response) {
+					dismissloading();
+					if (response.getParser().getResultSuccess()) {
+						new downContacts().execute();
+					}else if (response.getParser().getTokenerro()) {
+						LoginOut();
+					}else {
+						if (response.getParser().getResponseMsg()!=null) 
+							Toast.makeText(MainActivity.this, response.getParser().getResponseMsg(), Toast.LENGTH_SHORT).show();
+					}
+				}
+			}, errorListener);
+		}
+	}
+	
 	
 }
