@@ -41,7 +41,6 @@ import com.zhulin.contactcopy.paser.User;
 import com.zhulin.contactcopy.paser.UserPaser;
 import com.zhulin.contactcopy.receiver.CleanContactReceiver;
 import com.zhulin.contactcopy.receiver.DownAlarmReceiver;
-import com.zhulin.contactcopy.receiver.RefershDataReceiver;
 import com.zhulin.contactcopy.utils.ContactsUtil;
 import com.zhulin.contactcopy.view.MyDialog;
 import com.zhulin.contactcopy.view.RadialProgress;
@@ -77,7 +76,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 //		lin_user_manger.setOnClickListener(this);
 //		lin_upmanger.setOnClickListener(this);
 		new initData(0).execute();
-		openReferDataAlarm();
+//		openReferDataAlarm();
 	}
 
 	@Override
@@ -174,22 +173,19 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 					downtime=System.currentTimeMillis();
 				tv_time.setText(new SimpleDateFormat("MM月dd日 HH:mm").format(new Date(downtime)));
 			}
-			if (downtime!=0  && downtime-System.currentTimeMillis()>=180*1000) {
+			if (downtime!=0  && downtime-System.currentTimeMillis()>=6*60*1000) {
 				Intent intent = new Intent(MainActivity.this, CleanContactReceiver.class);
-				intent.setAction("receiver.CleanContactActivity");
-				PendingIntent sender=PendingIntent.getBroadcast( MainActivity.this,0, intent, 0);
-	            AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
-	            long tiptime=downtime-120*1000;
-	            am.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,tiptime,sender);
+		        PendingIntent sender=PendingIntent.getBroadcast( MainActivity.this,0, intent, 0);
+		        AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
+	            am.set(AlarmManager.RTC_WAKEUP,downtime-5*60*1000,sender);
 			}	
 			boolean isalarm=getSharedPreferences("SYSTEMSET", MODE_PRIVATE).getBoolean("Alarm", true);
 			if (isalarm) {
 				if (downtime!=0  && downtime-System.currentTimeMillis()>=60*1000) {
 					Intent intent = new Intent(MainActivity.this, DownAlarmReceiver.class);
-					intent.setAction("receiver.AlarmActivity");
 					PendingIntent sender=PendingIntent.getBroadcast( MainActivity.this,0, intent, 0);
 		            AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
-		            am.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,downtime,sender);
+		            am.set(AlarmManager.RTC_WAKEUP,downtime,sender);
 				}	
 			}
 		}
@@ -383,20 +379,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	
 	@SuppressLint("SimpleDateFormat")
 	private void openReferDataAlarm() {
-//		String dd=new SimpleDateFormat("HH:mm:ss").format(System.currentTimeMillis());
-//		String[] data=dd.split(":");
-//		int sh=Integer.valueOf(data[0]);
-//		int h=0;
-//		if (sh>2) {
-//			h=24-sh+2;
-//		}else {
-//			h=2-sh;
-//		}
-//		int m=59-Integer.valueOf(data[1]);
-//		int s=59-Integer.valueOf(data[2]);
-//		long triggerAtMillis=h*60*60*1000+m*60*1000+s*1000;
-		Intent intent = new Intent(MainActivity.this, RefershDataReceiver.class);
-		intent.setAction("receiver.RefershDataActivity");
+		Intent intent = new Intent(MainActivity.this, CleanContactReceiver.class);
         PendingIntent sender=PendingIntent.getBroadcast( MainActivity.this,0, intent, 0);
         long firstTime = SystemClock.elapsedRealtime(); // 开机之后到现在的运行时间(包括睡眠时间)  
         long systemTime = System.currentTimeMillis();  
@@ -405,7 +388,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
         // 这里时区需要设置一下，不然会有8个小时的时间差  
         calendar.setTimeZone(TimeZone.getTimeZone("GMT+8"));  
         calendar.set(Calendar.MINUTE, 0);  
-        calendar.set(Calendar.HOUR_OF_DAY, 3);  
+        calendar.set(Calendar.HOUR_OF_DAY, 0);  
         calendar.set(Calendar.SECOND, 0);  
         calendar.set(Calendar.MILLISECOND, 0);  
         // 选择的定时时间  

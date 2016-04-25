@@ -6,52 +6,65 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.android.volley.Response.Listener;
+import com.library.http.RequestCall;
 import com.zhulin.contactcopy.R;
 import com.zhulin.contactcopy.app.BaseActivity;
 import com.zhulin.contactcopy.app.CApplication;
+import com.zhulin.contactcopy.manger.RequestManger;
 import com.zhulin.contactcopy.paser.HXPhone;
 import com.zhulin.contactcopy.utils.ContactsUtil;
 import com.zhulin.contactcopy.view.MyDialog;
 
 public class CleanContactActivity extends BaseActivity {
-	private MyDialog progDialog;
+	private MyDialog progDialog,tipDialog;
 	private ProgressBar pb;
 	private TextView tv_progress;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		View view = View.inflate(CleanContactActivity.this,R.layout.dialog_tip_message, null);
-		MyDialog tipDialog = new MyDialog(CleanContactActivity.this,R.style.loading_dialog);
+		tipDialog = new MyDialog(CleanContactActivity.this,R.style.loading_dialog);
 		TextView tipTextView = (TextView) view.findViewById(R.id.tv_tip);// 提示文字
 		tipTextView.setText("下载时间就快到了！是否请空联系人？");// 设置加载信息
 		Button sure=(Button) view.findViewById(R.id.btn_sure);
-		sure.setVisibility(View.VISIBLE);
-		sure.setText("清空");
-		sure.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				new DetalsContacts().execute();
-			}
-		});
+		sure.setVisibility(View.GONE);
+//		sure.setText("清空");
+//		sure.setOnClickListener(new OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+//				new DetalsContacts().execute();
+//				RefershUserData();
+//			}
+//		});
 		LinearLayout.LayoutParams dialoglp = new LinearLayout.LayoutParams(CApplication.Width / 4 * 3,LinearLayout.LayoutParams.WRAP_CONTENT);
 		tipDialog.addContentView(view, dialoglp);
 		tipDialog.setCancelable(true);
 		tipDialog.show();
+		new DetalsContacts(false).execute();
+//		RefershUserData();
 	}
 
 	
 	private class DetalsContacts  extends AsyncTask<Integer, Integer,Integer> {
 		private int sunnum=0;
+		private boolean isStop=true;
+		
+		public DetalsContacts(boolean isStop) {
+			super();
+			this.isStop = isStop;
+		}
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
+			if (tipDialog!=null && tipDialog.isShowing()) 
+				tipDialog.dismiss();
 			showLoadingDialog(CleanContactActivity.this, "正在读取联系人......");
 		}
 		@Override
@@ -70,6 +83,7 @@ public class CleanContactActivity extends BaseActivity {
 				}
 			}else {
 				dismissloading();
+				CleanContactActivity.this.finish();
 			}
 			return null;
 		}
@@ -90,7 +104,11 @@ public class CleanContactActivity extends BaseActivity {
 			super.onPostExecute(result);
 			if (progDialog!=null && progDialog.isShowing()) 
 				progDialog.dismiss();
-			new DetalsContacts().execute();
+			if (!isStop) {
+				new DetalsContacts(true).execute();
+			}else {
+				CleanContactActivity.this.finish();
+			}
 		}
 	}
 	
@@ -120,4 +138,17 @@ public class CleanContactActivity extends BaseActivity {
 		}
 	}
 	
+	private void RefershUserData(){
+		String name = getSharedPreferences("NameAndPsw", MODE_PRIVATE).getString("username", "");
+		if (name != null && name.length() >= 1) {
+			String psw=getSharedPreferences("NameAndPsw", MODE_PRIVATE).getString("psw", "");
+		
+			RequestManger.Login(CleanContactActivity.this,name, psw,new Listener<RequestCall>() {
+	
+				@Override
+				public void onResponse(RequestCall response) {
+				}
+			}, errorListener);
+		}
+	}
 }

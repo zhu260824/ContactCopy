@@ -73,10 +73,8 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 								if (response.getParser().getResponseMsg() != null)
 									Toast.makeText(LoginActivity.this,response.getParser().getResponseMsg(),Toast.LENGTH_SHORT).show();
 								if (response.getParser().getResultSuccess()) {
-									if (iv_check != null
-											&& iv_check.getTag() != null) {
-										boolean checked = (Boolean) iv_check
-												.getTag();
+									if (iv_check != null&& iv_check.getTag() != null) {
+										boolean checked = (Boolean) iv_check.getTag();
 										if (checked) {
 											getSharedPreferences("NameAndPsw",MODE_PRIVATE).edit().putString("username",et_phone.getText().toString()).putString("psw",et_psw.getText().toString()).commit();
 										} else {
