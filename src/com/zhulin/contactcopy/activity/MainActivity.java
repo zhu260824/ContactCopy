@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.TimeZone;
 
 import android.annotation.SuppressLint;
@@ -23,8 +24,10 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import u.aly.r;
 
 import com.android.volley.Response.Listener;
+import com.library.UMengCountUtils;
 import com.library.app.ZLApplication;
 import com.library.http.RequestCall;
 import com.library.utils.SerializableFactory;
@@ -108,7 +111,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			break;
 		case R.id.lin_change_psw:
 			startActivityForResult(new Intent(MainActivity.this, RestPassWorldActivity.class),1);
-			break;
+			break; 
 		case R.id.lin_user_manger:
 			startActivityForResult(new Intent(MainActivity.this, MangerActivity.class),1);
 			break;
@@ -244,15 +247,31 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	private class downContacts extends AsyncTask<Integer, Integer,ArrayList<HXPhone>> {
 		private int sunnum=0;
 		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+		}
+		@Override
 		protected ArrayList<HXPhone> doInBackground(Integer... params) {
 			ArrayList<HXPhone> phonelists=HXPhonePaser.GetInstance();
 			if (phonelists!=null && phonelists.size()>=1) {
 				sunnum=phonelists.size();
+				HashMap<String, String> map=new HashMap<String, String>();
+				map.put("type", "下载数");
+				map.put("value", sunnum+"");
+				map.put("username", user.name);
+				UMengCountUtils.saveEvent(MainActivity.this, "1", map);
+				int writnum=0;
 				for (int i = 0; i < sunnum; i++) {
 					HXPhone hPhone=phonelists.get(i);
 					ContactsUtil.AddContacts(MainActivity.this, hPhone.name, hPhone.phone);
+					writnum++;
 					publishProgress(i);
 				}
+				HashMap<String, String> map1=new HashMap<String, String>();
+				map.put("type", "写入数");
+				map.put("value", writnum+"");
+				map.put("username", user.name);
+				UMengCountUtils.saveEvent(MainActivity.this, "1", map1);
 			}
 			return phonelists;
 		}
@@ -278,6 +297,8 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 				SaveTools.upDateUser(user);
 				Toast.makeText(MainActivity.this, "成功写入"+num+"条通讯录", Toast.LENGTH_SHORT).show();
 				new initData(System.currentTimeMillis()).execute();
+			}else {
+				Toast.makeText(MainActivity.this, "本次暂时未获取到数据，请稍后再试！", Toast.LENGTH_SHORT).show();
 			}
 			
 		}
@@ -408,6 +429,8 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	}
 	
 	private void  checkTime(){
+		iv_down.setImageResource(R.drawable.action_down_off);
+		iv_down.setClickable(false);
 		 Calendar calendar = Calendar.getInstance();  
 	     calendar.setTimeInMillis(System.currentTimeMillis());  
 	     // 这里时区需要设置一下，不然会有8个小时的时间差  
@@ -415,15 +438,18 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 	     int hour=calendar.get(Calendar.HOUR_OF_DAY);
 	     if (hour<5) {
 			Toast.makeText(MainActivity.this, "每天00:00-05:00暂停下载，请稍后下载", Toast.LENGTH_SHORT).show();
-		}else {
+			iv_down.setImageResource(R.drawable.action_down_on);
+			iv_down.setClickable(true);
+	     }else {
 			showLoadingDialog(MainActivity.this, "正在获取联系人......");
+			iv_down.setImageResource(R.drawable.action_down_on);
+			iv_down.setClickable(true);
 			RequestManger.PhoneDown(MainActivity.this,user.loginToken, user.id, new Listener<RequestCall>() {
-
 				@Override
 				public void onResponse(RequestCall response) {
 					dismissloading();
 					if (response.getParser().getResultSuccess()) {
-						new downContacts().execute();
+						DownCall();
 					}else if (response.getParser().getTokenerro()) {
 						LoginOut();
 					}else {
@@ -435,5 +461,23 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		}
 	}
 	
+	private void DownCall(){
+		showLoadingDialog(MainActivity.this, "正在检查联系人......");
+		RequestManger.PhoneDownCall(MainActivity.this, user.loginToken, user.id, new Listener<RequestCall>() {
+
+			@Override
+			public void onResponse(RequestCall response) {
+				dismissloading();
+				if (response.getParser().getResultSuccess()) {
+					new downContacts().execute();
+				}else if (response.getParser().getTokenerro()) {
+					LoginOut();
+				}else {
+					if (response.getParser().getResponseMsg()!=null) 
+						Toast.makeText(MainActivity.this, response.getParser().getResponseMsg(), Toast.LENGTH_SHORT).show();
+				}
+			}
+		}, errorListener);
+	}
 	
 }

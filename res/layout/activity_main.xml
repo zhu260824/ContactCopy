@@ -86,7 +86,7 @@
                 android:layout_marginRight="15dp"
                 android:layout_marginTop="20dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/action_down" />
+                android:src="@drawable/action_down_on" />
 
             <View
                 android:layout_width="fill_parent"

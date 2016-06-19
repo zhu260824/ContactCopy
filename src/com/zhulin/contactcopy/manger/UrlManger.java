@@ -9,4 +9,5 @@ public class UrlManger {
 	public final static String UPUSERS="/admin/updatauser.do";
 	public final static String RESTPSW="/admin/updatePassword";
 	public final static String DELETEUSER="/admin/deleteUser.do";
+	public final static String DOWNCALL="/admin/downcallback";
 }

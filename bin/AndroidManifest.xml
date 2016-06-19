@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.zhulin.contactcopy"
-    android:versionCode="9"
-    android:versionName="2.7" >
+    android:versionCode="11"
+    android:versionName="2.9" >
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -92,7 +92,7 @@
 
         <meta-data
             android:name="APP_URL"
-            android:value="http://139.196.12.248/json" />
+            android:value="http://139.196.12.248:8080/phone/json" />
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="562cdeaa67e58eafd0002db1" />
