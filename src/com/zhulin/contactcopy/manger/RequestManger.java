@@ -34,18 +34,20 @@ public class RequestManger {
 		PostRequest(context, call, listener, errorListener);
 	}
 	
-	public static void PhoneDown(Context context,String token,String userid,Listener<RequestCall> listener, ErrorListener errorListener){
+	public static void PhoneDown(Context context,String token,String userid,String reqid,Listener<RequestCall> listener, ErrorListener errorListener){
 		HashMap<String, String> parms = new HashMap<String, String>();
 		parms.put("token", token);
 		parms.put("userid", userid);
+		parms.put("reqid", reqid);
 		RequestCall call = new RequestCall(UrlManger.PHONEDOWN, parms,new HXPhonePaser());
 		PostRequest(context, call, listener, errorListener);
 	}
 	
-	public static void PhoneDownCall(Context context,String token,String userid,Listener<RequestCall> listener, ErrorListener errorListener){
+	public static void PhoneDownCall(Context context,String token,String userid,String reqid,Listener<RequestCall> listener, ErrorListener errorListener){
 		HashMap<String, String> parms = new HashMap<String, String>();
 		parms.put("token", token);
 		parms.put("userid", userid);
+		parms.put("reqid", reqid);
 		RequestCall call = new RequestCall(UrlManger.DOWNCALL, parms,new BaseParser());
 		PostRequest(context, call, listener, errorListener);
 	}

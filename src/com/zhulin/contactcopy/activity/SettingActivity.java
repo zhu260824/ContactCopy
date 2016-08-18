@@ -8,7 +8,7 @@ import com.zhulin.contactcopy.R;
 import com.zhulin.contactcopy.app.BaseActivity;
 
 public class SettingActivity extends BaseActivity {
-	private SwitchView switchView1,switchView2;
+	private SwitchView switchView1,switchView2,switchView3;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -18,6 +18,7 @@ public class SettingActivity extends BaseActivity {
 		goBack();
 		switchView1=(SwitchView) findViewById(R.id.switchView1);
 		switchView2=(SwitchView) findViewById(R.id.switchView2);
+		switchView3=(SwitchView) findViewById(R.id.switchView3);
 		switchView1.setOnStateChangeListener(new OnStateChangeListener() {
 			
 			@Override
@@ -44,6 +45,19 @@ public class SettingActivity extends BaseActivity {
 				}
 			}
 		});
+		switchView2.setOnStateChangeListener(new OnStateChangeListener() {
+			
+			@Override
+			public void onStateChange(int state) {
+				if (state==SwitchView.STATE_LEFT_ON_TOP) {
+					//左边ON按钮
+					getSharedPreferences("SYSTEMSET", MODE_PRIVATE).edit().putBoolean("mdr", true).commit();
+				}else {
+					//右边OFF按钮
+					getSharedPreferences("SYSTEMSET", MODE_PRIVATE).edit().putBoolean("mdr", false).commit();
+				}
+			}
+		});
 	}
 
 	@Override
@@ -52,6 +66,7 @@ public class SettingActivity extends BaseActivity {
 		if (hasFocus) {
 			boolean one=getSharedPreferences("SYSTEMSET", MODE_PRIVATE).getBoolean("ONE", true);
 			boolean isalarm=getSharedPreferences("SYSTEMSET", MODE_PRIVATE).getBoolean("Alarm", true);
+			boolean mdr=getSharedPreferences("SYSTEMSET", MODE_PRIVATE).getBoolean("mdr", true);
 			if (one) {
 				switchView1.setState(SwitchView.STATE_LEFT_ON_TOP);
 			}else {
@@ -61,6 +76,11 @@ public class SettingActivity extends BaseActivity {
 				switchView2.setState(SwitchView.STATE_LEFT_ON_TOP);
 			}else {
 				switchView2.setState(SwitchView.STATE_RIGHT_ON_TOP);
+			}
+			if (mdr) {
+				switchView3.setState(SwitchView.STATE_LEFT_ON_TOP);
+			}else {
+				switchView3.setState(SwitchView.STATE_RIGHT_ON_TOP);
 			}
 		}
 	}

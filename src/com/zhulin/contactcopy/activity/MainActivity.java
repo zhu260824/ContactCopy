@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.TimeZone;
+import java.util.UUID;
 
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
@@ -444,12 +445,13 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 			showLoadingDialog(MainActivity.this, "正在获取联系人......");
 			iv_down.setImageResource(R.drawable.action_down_on);
 			iv_down.setClickable(true);
-			RequestManger.PhoneDown(MainActivity.this,user.loginToken, user.id, new Listener<RequestCall>() {
+			final String uuid=UUID.randomUUID().toString();
+			RequestManger.PhoneDown(MainActivity.this,user.loginToken, user.id,uuid, new Listener<RequestCall>() {
 				@Override
 				public void onResponse(RequestCall response) {
 					dismissloading();
 					if (response.getParser().getResultSuccess()) {
-						DownCall();
+						DownCall(uuid);
 					}else if (response.getParser().getTokenerro()) {
 						LoginOut();
 					}else {
@@ -461,9 +463,9 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 		}
 	}
 	
-	private void DownCall(){
+	private void DownCall(String uuid){
 		showLoadingDialog(MainActivity.this, "正在检查联系人......");
-		RequestManger.PhoneDownCall(MainActivity.this, user.loginToken, user.id, new Listener<RequestCall>() {
+		RequestManger.PhoneDownCall(MainActivity.this, user.loginToken, user.id,uuid, new Listener<RequestCall>() {
 
 			@Override
 			public void onResponse(RequestCall response) {
